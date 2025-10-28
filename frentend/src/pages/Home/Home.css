@@ -1,0 +1,228 @@
+/*animation fade up*/
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  font-family: outfit, sans-serif;
+  background: #f1f5f9;
+}
+
+.section .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 70%;
+}
+
+/* Title animation */
+.section .container h1 {
+  font-size: 48px;
+  color: black;
+  font-weight: 600;
+  line-height: 48px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+/* Search container animation */
+.search-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 100px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.search-item {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.search-item label {
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+}
+
+.search-item select,
+.search-item input {
+  padding: 6px 0;
+  color: #8b909d;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.search-item select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Search button */
+.section .search {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.section .search-button {
+  background-color: #2663eb;
+  color: #f1f5f9;
+  padding: 8px 16px;
+  border: none;
+  width: 140px;
+  height: 50px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.section .search-button:hover {
+  background-color: #1b4ed8;
+  transform: translateY(-2px);
+}
+
+/* Car image animation */
+.image-car {
+  width: 85%;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.8s;
+}
+
+.image-car img {
+  width: 100%;
+  height: auto;
+}
+
+/* Featured Cars Section */
+.featured-cars {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Title animation */
+.featured-cars h2 {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: outfit, sans-serif;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+/* Subtitle animation */
+.featured-cars p {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 30px;
+  font-family: inherit;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* Car list animation */
+.car-list {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .section .container {
+    width: 80%;
+  }
+
+  .section .container h1 {
+    font-size: 26px;
+    line-height: 36px;
+    text-align: center;
+  }
+
+  .search-container {
+    flex-direction: row;
+    border-radius: 20px;
+    gap: 0;
+    width: 90%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .section .search {
+    margin-left: 0;
+  }
+
+  .section .search-button {
+    padding: 0px;
+    width: 90px;
+    font-weight: 500;
+  }
+
+  .image-car {
+    width: 100%;
+  }
+  /* Featured Cars Section */
+    .featured-cars h1 {
+        font-size: 24px;
+    }.featured-cars p {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .section .container {
+    width: 80%;
+  }
+  .search-container {
+    width: 90%;
+  }
+}
