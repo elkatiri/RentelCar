@@ -8,15 +8,10 @@ use Illuminate\Support\Facades\Storage;
 
 class VehicleController extends Controller
 {
-    // List all vehicles with reservations
+    // List all vehicles with reservations and features
     public function index()
     {
-        $vehicles = Vehicle::with('reservations')->get();
-
-        $vehicles->each(function ($vehicle) {
-            $vehicle->image = $vehicle->image ? asset('storage/' . $vehicle->image) : null;
-        });
-
+        $vehicles = Vehicle::with(['reservations', 'features'])->get();
         return response()->json($vehicles, 200);
     }
 
@@ -31,18 +26,23 @@ class VehicleController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'available' => 'nullable',
+            'features' => 'nullable|array',
+            'features.*' => 'integer|exists:features,id',
         ]);
 
-        // Handle boolean properly
         $data['available'] = $request->has('available') ? filter_var($request->available, FILTER_VALIDATE_BOOLEAN) : true;
 
-        // Handle image upload
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('vehicles', 'public');
         }
 
         $vehicle = Vehicle::create($data);
 
+        if (!empty($data['features'])) {
+            $vehicle->features()->attach($data['features']);
+        }
+
+        $vehicle->load('features');
         $vehicle->image = $vehicle->image ? asset('storage/' . $vehicle->image) : null;
 
         return response()->json([
@@ -54,7 +54,7 @@ class VehicleController extends Controller
     // Show a single vehicle
     public function show($id)
     {
-        $vehicle = Vehicle::find($id);
+        $vehicle = Vehicle::with('features')->find($id);
 
         if (!$vehicle) {
             return response()->json(['message' => 'Vehicle not found'], 404);
@@ -82,14 +82,14 @@ class VehicleController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'available' => 'nullable',
+            'features' => 'nullable|array',
+            'features.*' => 'integer|exists:features,id',
         ]);
 
-        // Handle boolean properly
         if ($request->has('available')) {
             $data['available'] = filter_var($request->available, FILTER_VALIDATE_BOOLEAN);
         }
 
-        // Handle image replacement
         if ($request->hasFile('image')) {
             if ($vehicle->image && Storage::disk('public')->exists($vehicle->image)) {
                 Storage::disk('public')->delete($vehicle->image);
@@ -99,6 +99,11 @@ class VehicleController extends Controller
 
         $vehicle->update($data);
 
+        if (isset($data['features'])) {
+            $vehicle->features()->sync($data['features']);
+        }
+
+        $vehicle->load('features');
         $vehicle->image = $vehicle->image ? asset('storage/' . $vehicle->image) : null;
 
         return response()->json([
@@ -124,4 +129,4 @@ class VehicleController extends Controller
 
         return response()->json(['message' => 'Vehicle deleted successfully'], 200);
     }
-} 
+}

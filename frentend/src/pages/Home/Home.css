@@ -9,7 +9,14 @@
     transform: translateY(0);
   }
 }
-
+@keyframes translatex {
+  0% {
+    transform: translateX(7px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
 .home {
   width: 100%;
   height: 100%;
@@ -175,6 +182,116 @@
   animation: fadeUp 0.8s ease-out forwards;
   animation-delay: 0.6s;
 }
+/* Load More Button */
+.load-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+.load-more button {
+  background-color: transparent;
+  color: #000000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+  border: 1px solid #c4c7d2;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+.load-more button:hover {
+  background-color: #e7ebee;
+  transform: translateY(-2px);
+}
+.load-more .arrow {
+  animation: translatex 0.7s ease-out infinite;
+}
+/* Call to Action Section */
+.call-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 60px 20px;
+  background: linear-gradient(to right, #2663eb , #9ec8ff );
+  color: #f1f5f9;
+  font-family: outfit, sans-serif;
+  border-radius: 20px;
+  margin: 60px 80px;
+}
+.call-action .content{
+  display: flex;
+  flex-direction: column;
+  padding:0 35px;
+
+}
+.call-action .content h1{
+  font-size: 36px;
+}
+.call-action .content p{
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight:500;
+}
+.call-action .cta-button {
+  background-color: #f1f5f9;
+  color: #2663eb;
+  padding:10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width:fit-content;
+  text-align: left;
+}
+.call-action .cta-button:hover {
+  background-color: #e2e8f0;
+  transform: scale(1.05);
+}
+
+.img-cta img{
+  width: 350px;
+  
+}
+/*  reviews section */
+.review-call-toAction{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+  font-family: inherit;
+  flex-direction: column;
+}
+.review-title {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: outfit, sans-serif;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+.review-subtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 30px;
+  font-family: inherit;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+  animation-delay: 0.4s;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -216,6 +333,34 @@
     }.featured-cars p {
         font-size: 14px;
     }
+    /*call toaction section*/
+  .call-action {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+    margin: 30px 10px;
+  }
+  .img-cta img{
+    width: 90%;
+  }
+  .call-action .content h1{
+    font-size: 24px;
+    line-height: 1.2;
+    text-align: left;
+  }
+  .call-action .content p{
+    font-size: 14px;
+    text-align: justify;
+  }
+  /*review section*/
+  .review-title{
+    font-size: 28px;
+  }
+  .review-subtitle{
+    text-align: center;
+    text-transform: capitalize;
+    line-height: 1.4;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -225,4 +370,13 @@
   .search-container {
     width: 90%;
   }
+  /*call toaction section*/
+  .call-action {
+    flex-direction: column;
+    align-items: center;
+  }
+  .img-cta img{
+    width: 80%;
+  }
+
 }

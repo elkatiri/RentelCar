@@ -2,12 +2,13 @@
 import './navbar.css';
 import { Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import logo from './../../images/logo.svg';
 export default function Navbar() {
 const [isOpen, setOpen] = useState(false);
   return (
       <div className="navbar">
         <div className="logo">
-            <img src='https://car-rental-gs.vercel.app/assets/logo-CF3gF4eH.svg' alt="Logo" />
+            <img src={logo} alt="Logo" />
         </div>
         <div className='menu-icon'onClick={()=>setOpen(!isOpen)}>
             {isOpen?<X size={20}/>:<Menu size={20}/>}

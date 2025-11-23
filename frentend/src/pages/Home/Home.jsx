@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Navbar from '../../components/NavBar/Navbar';
 import './Home.css';
 import carImage from '../../images/main_car.webp';
+import Cars from '../../components/cars/cars';
+import { MoveRight } from 'lucide-react';
+import imgAction from '../../images/call-action.png';
+import Reviews from '../../components/reviews/reviews';
+import Footer from '../../components/footer/footer';
 
 const Home = () => {
+  const [cars, setCars] = useState([]);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/vehicles');
+        setCars(response.data);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+      }
+    };
+    fetchCars();
+  }, []);
+
   return (
     <div className="home">
       <Navbar />
@@ -42,15 +62,41 @@ const Home = () => {
           </div>
         </div>
       </div>
-       <div className="featured-cars">
-          <h1 className="featured-title">Featured Vehicles</h1>
-          <p className="featured-subtitle">
-            Explore our selection of premium vehicles available for your next adventure.
-          </p>
-          <div className="car-list">
-            {/* Featured cars will be displayed here */}
-          </div>
+      {/* Featured Cars Section */}
+      <div className="featured-cars">
+        <h1 className="featured-title">Featured Vehicles</h1>
+        <p className="featured-subtitle">
+          Explore our selection of premium vehicles available for your next adventure.
+        </p>
+        {/* Car List Component */}
+        <div className="car-list">
+          <Cars cars={cars} />
         </div>
+      </div>
+       {/* Load More Button */}
+      <div className='load-more'>
+        <button>Explore all cars <MoveRight className='arrow' /> </button>
+      </div>
+      <div className='call-action'>
+        <div className ='content'>
+          <h1>Ready to hit the road?</h1>
+          <p>Monetize your vehicle effortlessly by listing it on CarRental.
+            We take care of insurance, driver verification and secure payments — so you can earn passive income, stress-free.</p>
+          <button className='cta-button'>List your car</button>
+        </div>
+        <div className='img-cta'>
+          <img src={imgAction} alt="call-action" />
+        </div>
+      </div>
+      {/* reviews section */}
+      <div className="review-call-toAction">
+          <h1 className="review-title">What Our Clients Say</h1>
+        <p className="review-subtitle">
+          Discover some of our Clients reviews about our services
+        </p>
+        </div>
+      <Reviews />
+      <Footer />
     </div>
   );
 };
