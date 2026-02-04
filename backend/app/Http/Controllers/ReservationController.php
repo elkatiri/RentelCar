@@ -7,9 +7,28 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reservations = Reservation::with(['user', 'vehicle'])->get();
+        $perPage = $request->query('per_page', 15);
+        $status = $request->query('status');
+        $userId = $request->query('user_id');
+        $vehicleId = $request->query('vehicle_id');
+        
+        $query = Reservation::with(['user', 'vehicle']);
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+        
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+        
+        if ($vehicleId) {
+            $query->where('vehicle_id', $vehicleId);
+        }
+        
+        $reservations = $query->orderBy('created_at', 'desc')->paginate($perPage);
         return response()->json($reservations, 200);
     }
 

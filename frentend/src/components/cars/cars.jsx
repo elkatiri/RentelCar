@@ -9,10 +9,13 @@ export default function Cars() {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/vehicles')
-        setCars(response.data)
+        const response = await axios.get('http://127.0.0.1:8000/api/vehicles?per_page=50')
+        // Handle both paginated and direct array responses
+        const carsData = Array.isArray(response.data) ? response.data : (response.data.data || [])
+        setCars(carsData)
       } catch (error) {
         console.error('Error fetching cars:', error)
+        setCars([])
       }
     }
     fetchCars()
@@ -53,48 +56,54 @@ const getFeatureIcon = (featureName) => {
 
   return (
     <div className="cars-container">
-      {cars.map((car) => (
-        <div key={car.id} className="car-card">
-          <div className="car-image">
-            <img
-              src={
-                car.image.startsWith('http')
-                  ? car.image
-                  : `http://127.0.0.1:8000/storage/${car.image}`
-              }
-              alt={`${car.brand} ${car.model}`}
-            />
-            {car.available ? (
-              <div className="car-status available">Available</div>
-            ) : (
-              <div className="car-status unavailable">Unavailable</div>
-            )}
-            <div className="car-price">
-              <strong>{Math.round(car.price_per_day)} MAD</strong> / day
-            </div>
-          </div>
-
-          <div className="car-details">
-            <h3 className="car-title">
-              {car.brand} {car.model}
-            </h3>
-            {car.year && <p className="car-year">Year: {car.year}</p>}
-            <p className="car-subtitle">{car.description}</p>
-
-            <div className="car-info">
-              {car.features && car.features.length > 0 ? (
-                car.features.map((feature) => (
-                  <div key={feature.id}>
-                    {getFeatureIcon(feature.name)} {feature.name}
-                  </div>
-                ))
+      {Array.isArray(cars) && cars.length > 0 ? (
+        cars.map((car) => (
+          <div key={car.id} className="car-card">
+            <div className="car-image">
+              <img
+                src={
+                  car.image && car.image.startsWith('http')
+                    ? car.image
+                    : car.image ? `http://127.0.0.1:8000/storage/${car.image}` : 'https://via.placeholder.com/300x200'
+                }
+                alt={`${car.brand} ${car.model}`}
+              />
+              {car.available ? (
+                <div className="car-status available">Available</div>
               ) : (
-                <div>No features available</div>
+                <div className="car-status unavailable">Unavailable</div>
               )}
+              <div className="car-price">
+                <strong>{Math.round(car.price_per_day)} MAD</strong> / day
+              </div>
+            </div>
+
+            <div className="car-details">
+              <h3 className="car-title">
+                {car.brand} {car.model}
+              </h3>
+              {car.year && <p className="car-year">Year: {car.year}</p>}
+              <p className="car-subtitle">{car.description}</p>
+
+              <div className="car-info">
+                {car.features && car.features.length > 0 ? (
+                  car.features.map((feature) => (
+                    <div key={feature.id}>
+                      {getFeatureIcon(feature.name)} {feature.name}
+                    </div>
+                  ))
+                ) : (
+                  <div>No features available</div>
+                )}
+              </div>
             </div>
           </div>
+        ))
+      ) : (
+        <div style={{textAlign: 'center', padding: '40px', color: '#999'}}>
+          {cars === null ? 'Loading cars...' : 'No cars available'}
         </div>
-      ))}
+      )}
     </div>
   )
 }

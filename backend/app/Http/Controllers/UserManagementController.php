@@ -81,9 +81,20 @@ class UserManagementController extends Controller
     // User Management (CRUD)
     // -----------------------------
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(User::all(), 200);
+        $perPage = $request->query('per_page', 15);
+        $search = $request->query('search', '');
+        
+        $query = User::query();
+        
+        if ($search) {
+            $query->where('name', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%");
+        }
+        
+        $users = $query->paginate($perPage);
+        return response()->json($users, 200);
     }
 
     public function store(Request $request)
@@ -92,6 +103,7 @@ class UserManagementController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'role' => 'nullable|in:admin,host,user',
         ]);
 
         if ($validator->fails()) {
@@ -102,6 +114,7 @@ class UserManagementController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'user',
         ]);
 
         return response()->json($user, 201);

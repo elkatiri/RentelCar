@@ -9,9 +9,30 @@ use Illuminate\Support\Facades\Storage;
 class VehicleController extends Controller
 {
     // List all vehicles with reservations and features
-    public function index()
+    public function index(Request $request)
     {
-        $vehicles = Vehicle::with(['reservations', 'features'])->get();
+        $perPage = $request->query('per_page', 15);
+        $search = $request->query('search', '');
+        $available = $request->query('available');
+        
+        $query = Vehicle::with(['features']);
+        
+        if ($search) {
+            $query->where('brand', 'like', "%$search%")
+                  ->orWhere('model', 'like', "%$search%");
+        }
+        
+        if ($available !== null) {
+            $query->where('available', filter_var($available, FILTER_VALIDATE_BOOLEAN));
+        }
+        
+        $vehicles = $query->paginate($perPage);
+        
+        $vehicles->getCollection()->transform(function ($vehicle) {
+            $vehicle->image = $vehicle->image ? asset('storage/' . $vehicle->image) : null;
+            return $vehicle;
+        });
+        
         return response()->json($vehicles, 200);
     }
 
@@ -24,7 +45,7 @@ class VehicleController extends Controller
             'year' => 'required|integer',
             'price_per_day' => 'required|numeric',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
             'available' => 'nullable',
             'features' => 'nullable|array',
             'features.*' => 'integer|exists:features,id',
@@ -80,7 +101,7 @@ class VehicleController extends Controller
             'year' => 'sometimes|required|integer',
             'price_per_day' => 'sometimes|required|numeric',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
             'available' => 'nullable',
             'features' => 'nullable|array',
             'features.*' => 'integer|exists:features,id',
