@@ -33,7 +33,12 @@ export default function Login() {
         localStorage.setItem('user', JSON.stringify(response.data.user));
         setSuccess('Login successful! Redirecting...');
         setTimeout(() => {
-          navigate('/dashboard');
+          // Redirect to dashboard only if admin, otherwise home
+          if (response.data.user.role === 'admin') {
+            navigate('/dashboard');
+          } else {
+            navigate('/');
+          }
         }, 1500);
       }
     } catch (err) {
@@ -64,7 +69,7 @@ export default function Login() {
                 <input
                   type="email"
                   name="email"
-                  placeholder="admin@example.com"
+                  placeholder="Enter your email address"
                   value={formData.email}
                   onChange={handleChange}
                   required

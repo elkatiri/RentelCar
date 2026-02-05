@@ -40,7 +40,12 @@ export default function Signup() {
         localStorage.setItem('user', JSON.stringify(response.data.user));
         setSuccess('Account created successfully! Redirecting...');
         setTimeout(() => {
-          navigate('/dashboard');
+          // Redirect to dashboard only if admin, otherwise home
+          if (response.data.user.role === 'admin') {
+            navigate('/dashboard');
+          } else {
+            navigate('/');
+          }
         }, 1500);
       }
     } catch (err) {

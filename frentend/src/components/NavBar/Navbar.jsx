@@ -55,8 +55,8 @@ export default function Navbar() {
       </div>
       <ul className={`nav-links ${isOpen ? 'nav-active' : ''}`}>
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/">Cars</Link></li>
-        {user && <li><Link to="/">My Bookings</Link></li>}
+        <li><Link to="/cars">Cars</Link></li>
+        {user && <li><Link to="/bookings">My Bookings</Link></li>}
         {user && user.role === 'admin' && <li><Link to="/dashboard">Dashboard</Link></li>}
         <div className="search-box">
           <input type="text" placeholder="Search..." />

@@ -24,6 +24,13 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const user = JSON.parse(localStorage.getItem('user')) || { name: 'Admin', role: 'admin' };
 
+  // Check if user is admin
+  React.useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
