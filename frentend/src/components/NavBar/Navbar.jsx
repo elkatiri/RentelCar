@@ -2,6 +2,7 @@ import './navbar.css';
 import { Search, Menu, X, LogOut, ChevronDown, User } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import axios from 'axios';
 import logo from './../../images/logo.svg';
 
 export default function Navbar() {
@@ -10,7 +11,12 @@ export default function Navbar() {
   const [isOpen, setOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [allVehicles, setAllVehicles] = useState([]);
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -20,11 +26,47 @@ export default function Navbar() {
     }
   }, [token]);
 
+  // Fetch all vehicles for search
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/vehicles?per_page=100');
+        const vehiclesData = Array.isArray(response.data) ? response.data : (response.data.data || []);
+        setAllVehicles(vehiclesData);
+      } catch (error) {
+        console.error('Error fetching vehicles:', error);
+      }
+    };
+    fetchVehicles();
+  }, []);
+
+  // Handle search
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const filtered = allVehicles.filter((vehicle) => {
+      const brand = vehicle.brand?.toLowerCase() || '';
+      const model = vehicle.model?.toLowerCase() || '';
+      return brand.includes(query) || model.includes(query);
+    });
+
+    setSearchResults(filtered);
+    setShowSearchResults(true);
+  }, [searchQuery, allVehicles]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchResults(false);
       }
     };
 
@@ -58,9 +100,52 @@ export default function Navbar() {
         <li><Link to="/cars">Cars</Link></li>
         {user && <li><Link to="/bookings">My Bookings</Link></li>}
         {user && user.role === 'admin' && <li><Link to="/dashboard">Dashboard</Link></li>}
-        <div className="search-box">
-          <input type="text" placeholder="Search..." />
+        <div className="search-box" ref={searchRef}>
+          <input 
+            type="text" 
+            placeholder="Search vehicles..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => searchQuery && setShowSearchResults(true)}
+          />
           <Search className='search-icon' size={14} />
+          
+          {/* Search Results Dropdown */}
+          {showSearchResults && searchResults.length > 0 && (
+            <div className="search-results-dropdown">
+              {searchResults.map((vehicle) => (
+                <div
+                  key={vehicle.id}
+                  className="search-result-item"
+                  onClick={() => {
+                    navigate(`/vehicles/${vehicle.id}`);
+                    setSearchQuery('');
+                    setShowSearchResults(false);
+                  }}
+                >
+                  <img
+                    src={
+                      vehicle.image && vehicle.image.startsWith('http')
+                        ? vehicle.image
+                        : vehicle.image
+                        ? `http://127.0.0.1:8000/storage/${vehicle.image}`
+                        : 'https://via.placeholder.com/50x40'
+                    }
+                    alt={`${vehicle.brand} ${vehicle.model}`}
+                    className="search-result-image"
+                  />
+                  <div className="search-result-info">
+                    <div className="search-result-name">
+                      {vehicle.brand} {vehicle.model}
+                    </div>
+                    <div className="search-result-price">
+                      ${Number(vehicle.price_per_day).toFixed(2)}/day
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <li className='list-cars'>List cars</li>
         

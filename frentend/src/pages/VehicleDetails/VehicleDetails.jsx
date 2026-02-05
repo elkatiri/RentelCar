@@ -1,43 +1,75 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Calendar, MapPin, X } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Users, Gauge, Settings, MapPin, Wind, Armchair, Radio, Navigation, Sun, Car, Timer, Flame, Camera, ChevronLeft, Calendar } from 'lucide-react';
 import Swal from 'sweetalert2';
-import './CarListing.css';
+import './VehicleDetails.css';
 import Navbar from '../../components/NavBar/Navbar';
 import Footer from '../../components/footer/footer';
-import Cars from '../../components/cars/cars';
+import { X } from 'lucide-react';
 
-const CarListing = () => {
-  const [vehicles, setVehicles] = useState([]);
+const VehicleDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [vehicle, setVehicle] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedCar, setSelectedCar] = useState(null);
+  const [bookingModal, setBookingModal] = useState(false);
   const [bookingData, setBookingData] = useState({
     start_date: '',
     end_date: '',
-    location: '', 
+    location: '',
   });
-  const [bookingModal, setBookingModal] = useState(false);
 
   const token = localStorage.getItem('token');
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   useEffect(() => {
-    fetchVehicles();
-  }, []);
+    const fetchVehicle = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/vehicles/${id}`);
+        setVehicle(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching vehicle:', error);
+        setLoading(false);
+      }
+    };
+    fetchVehicle();
+  }, [id]);
 
-  const fetchVehicles = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:8000/api/vehicles?per_page=100');
-      const carsData = Array.isArray(response.data) ? response.data : (response.data.data || []);
-      setVehicles(carsData);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching vehicles:', error);
-      setLoading(false);
+  const getFeatureIcon = (featureName) => {
+    switch (featureName) {
+      case '4 Seats':
+        return <Users size={24} />;
+      case 'Hybrid':
+        return <Gauge size={24} />;
+      case 'Automatic':
+      case 'Manual':
+        return <Settings size={24} />;
+      case 'Air Conditioning':
+        return <Wind size={24} />;
+      case 'Leather Seats':
+        return <Armchair size={24} />;
+      case 'Bluetooth':
+        return <Radio size={24} />;
+      case 'GPS Navigation':
+        return <Navigation size={24} />;
+      case 'Sunroof':
+        return <Sun size={24} />;
+      case 'All-Wheel Drive':
+        return <Car size={24} />;
+      case 'Cruise Control':
+        return <Timer size={24} />;
+      case 'Heated Seats':
+        return <Flame size={24} />;
+      case 'Rear Camera':
+        return <Camera size={24} />;
+      default:
+        return <MapPin size={24} />;
     }
   };
 
-  const handleBookingClick = (car) => {
+  const handleBookingClick = () => {
     if (!token) {
       Swal.fire({
         title: 'Login Required',
@@ -46,12 +78,11 @@ const CarListing = () => {
         confirmButtonText: 'Go to Login',
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location.href = '/login';
+          navigate('/login');
         }
       });
       return;
     }
-    setSelectedCar(car);
     setBookingModal(true);
   };
 
@@ -72,7 +103,7 @@ const CarListing = () => {
       const response = await axios.post(
         'http://127.0.0.1:8000/api/reservations',
         {
-          vehicle_id: selectedCar.id,
+          vehicle_id: vehicle.id,
           user_id: user.id,
           start_date: bookingData.start_date,
           end_date: bookingData.end_date,
@@ -84,7 +115,7 @@ const CarListing = () => {
       Swal.fire('Success!', 'Booking created successfully. Please wait for admin approval.', 'success');
       setBookingModal(false);
       setBookingData({ start_date: '', end_date: '', location: '' });
-      setSelectedCar(null);
+      navigate('/bookings');
     } catch (error) {
       Swal.fire('Error!', error.response?.data?.message || 'Failed to create booking.', 'error');
     }
@@ -92,11 +123,24 @@ const CarListing = () => {
 
   if (loading) {
     return (
-      <div className="car-listing">
+      <div className="vehicle-details">
         <Navbar />
         <div className="loading-container">
           <div className="spinner"></div>
-          <p>Loading vehicles...</p>
+          <p>Loading vehicle details...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!vehicle) {
+    return (
+      <div className="vehicle-details">
+        <Navbar />
+        <div className="error-container">
+          <p>Vehicle not found</p>
+          <button onClick={() => navigate('/cars')}>Back to Cars</button>
         </div>
         <Footer />
       </div>
@@ -104,57 +148,87 @@ const CarListing = () => {
   }
 
   return (
-    <div className="car-listing">
+    <div className="vehicle-details">
       <Navbar />
 
-      <div className="listing-header">
-        <div className="listing-header-overlay"></div>
-        <div className="listing-header-content">
-          <div className="header-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-            </svg>
-            <span>Premium Fleet</span>
+      <div className="details-header">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <ChevronLeft size={24} /> Back
+        </button>
+      </div>
+
+      <div className="details-container">
+        <div className="details-content">
+          {/* Main Image */}
+          <div className="details-image-section">
+            <img
+              src={
+                vehicle.image && vehicle.image.startsWith('http')
+                  ? vehicle.image
+                  : vehicle.image
+                  ? `http://127.0.0.1:8000/storage/${vehicle.image}`
+                  : 'https://via.placeholder.com/600x400'
+              }
+              alt={`${vehicle.brand} ${vehicle.model}`}
+              className="details-main-image"
+            />
+            <div className={`status-badge ${vehicle.available ? 'available' : 'unavailable'}`}>
+              {vehicle.available ? '✓ Available' : '✗ Not Available'}
+            </div>
           </div>
-          <h1>
-            Discover Your Perfect Ride
-            <span className="header-gradient-text">Luxury Meets Performance</span>
-          </h1>
-          <p>Handpicked premium vehicles designed for unforgettable journeys. From sleek sedans to powerful SUVs.</p>
-          
-          <div className="header-stats">
-            <div className="stat-item">
-              <span className="stat-number">50+</span>
-              <span className="stat-label">Premium Cars</span>
+
+          {/* Details Info */}
+          <div className="details-info">
+            <div className="details-header-section">
+              <div>
+                <h1 className="details-title">
+                  {vehicle.brand} {vehicle.model}
+                </h1>
+                <p className="details-year">Year: {vehicle.year}</p>
+              </div>
+              <div className="price-section">
+                <p className="price-label">Price per day</p>
+                <p className="price-amount">${Number(vehicle.price_per_day).toFixed(2)}</p>
+              </div>
             </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-number">24/7</span>
-              <span className="stat-label">Available</span>
+
+            <p className="details-description">{vehicle.description}</p>
+
+            {/* Features */}
+            <div className="features-section">
+              <h2>Features & Specifications</h2>
+              <div className="features-grid">
+                {vehicle.features && vehicle.features.length > 0 ? (
+                  vehicle.features.map((feature) => (
+                    <div key={feature.id} className="feature-item">
+                      {getFeatureIcon(feature.name)}
+                      <span>{feature.name}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p>No features available</p>
+                )}
+              </div>
             </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-number">4.9★</span>
-              <span className="stat-label">Rating</span>
-            </div>
+
+            {/* Booking Button */}
+            <button
+              className={`book-button-large ${vehicle.available ? 'active' : 'disabled'}`}
+              onClick={handleBookingClick}
+              disabled={!vehicle.available}
+            >
+              {vehicle.available ? 'Book Now' : 'Not Available'}
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="listing-container">
-        <Cars 
-          vehicles={vehicles}
-          loading={loading}
-          onBookClick={handleBookingClick}
-        />
-      </div>
-
       {/* Booking Modal */}
-      {bookingModal && selectedCar && (
+      {bookingModal && (
         <div className="modal-overlay" onClick={() => setBookingModal(false)}>
           <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Book {selectedCar.brand} {selectedCar.model}</h2>
+              <h2>Book {vehicle.brand} {vehicle.model}</h2>
               <button className="modal-close" onClick={() => setBookingModal(false)}>
                 <X size={24} />
               </button>
@@ -164,17 +238,17 @@ const CarListing = () => {
               <div className="booking-car-preview">
                 <img
                   src={
-                    selectedCar.image && selectedCar.image.startsWith('http')
-                      ? selectedCar.image
-                      : selectedCar.image
-                      ? `http://127.0.0.1:8000/storage/${selectedCar.image}`
+                    vehicle.image && vehicle.image.startsWith('http')
+                      ? vehicle.image
+                      : vehicle.image
+                      ? `http://127.0.0.1:8000/storage/${vehicle.image}`
                       : 'https://via.placeholder.com/300x200'
                   }
-                  alt={`${selectedCar.brand} ${selectedCar.model}`}
+                  alt={`${vehicle.brand} ${vehicle.model}`}
                 />
                 <div className="booking-car-details">
-                  <h3>{selectedCar.brand} {selectedCar.model}</h3>
-                  <p>${Number(selectedCar.price_per_day).toFixed(2)}/day</p>
+                  <h3>{vehicle.brand} {vehicle.model}</h3>
+                  <p>${Number(vehicle.price_per_day).toFixed(2)}/day</p>
                 </div>
               </div>
 
@@ -235,13 +309,13 @@ const CarListing = () => {
                     </div>
                     <div className="summary-item">
                       <span>Price per day:</span>
-                      <span>${Number(selectedCar.price_per_day).toFixed(2)}</span>
+                      <span>${Number(vehicle.price_per_day).toFixed(2)}</span>
                     </div>
                     <div className="summary-item total">
                       <span>Total:</span>
                       <span>
                         ${(
-                          Number(selectedCar.price_per_day) *
+                          Number(vehicle.price_per_day) *
                           Math.ceil((new Date(bookingData.end_date) - new Date(bookingData.start_date)) / (1000 * 60 * 60 * 24))
                         ).toFixed(2)}
                       </span>
@@ -268,4 +342,4 @@ const CarListing = () => {
   );
 };
 
-export default CarListing;
+export default VehicleDetails;

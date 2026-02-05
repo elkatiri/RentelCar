@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/NavBar/Navbar';
 import './Home.css';
 import carImage from '../../images/main_car.webp';
@@ -11,6 +12,7 @@ import Footer from '../../components/footer/footer';
 
 const Home = () => {
   const [cars, setCars] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -70,12 +72,12 @@ const Home = () => {
         </p>
         {/* Car List Component */}
         <div className="car-list">
-          <Cars cars={cars} />
+          <Cars vehicles={cars} limit={4} />
         </div>
       </div>
        {/* Load More Button */}
       <div className='load-more'>
-        <button>Explore all cars <MoveRight className='arrow' /> </button>
+        <button onClick={() => navigate('/cars')}>Explore all cars <MoveRight className='arrow' /> </button>
       </div>
       <div className='call-action'>
         <div className ='content'>

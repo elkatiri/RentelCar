@@ -98,6 +98,68 @@
     pointer-events: none;
 }
 
+/* Search Results Dropdown */
+.search-results-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid rgba(106, 124, 255, 0.2);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1001;
+}
+
+.search-result-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: rgba(106, 124, 255, 0.08);
+    padding-left: 18px;
+}
+
+.search-result-image {
+    width: 50px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.search-result-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.search-result-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.search-result-price {
+    font-size: 12px;
+    color: #ff6b35;
+    font-weight: 500;
+}
+
 .list-cars {
     margin: 0 8px;
     padding: 8px 16px;
@@ -135,7 +197,7 @@
     align-items: center;
     justify-content: center;
     padding: 10px 24px;
-    background: linear-gradient(135deg, #6a7cff, #4dd0e1);
+    background: linear-gradient(135deg, #2d5bff 0%, #6366f1 50%, #8b5cf6 100%);
     color: #ffffff;
     border-radius: 10px;
     font-weight: 700;
@@ -147,7 +209,10 @@
     position: relative;
     overflow: hidden;
 }
-
+.auth-links a:hover{
+    background: linear-gradient(135deg, #2d5bff 0%, #6366f1 50%, #8b5cf6 100%);
+    transform: translateY(-2px);
+}
 .auth-links a::before {
     content: '';
     position: absolute;
@@ -367,7 +432,6 @@
     .nav-links li {
         width: 100%;
     }
-
     .nav-links a {
         padding: 12px 16px;
         width: 100%;

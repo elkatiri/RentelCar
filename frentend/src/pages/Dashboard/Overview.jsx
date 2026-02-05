@@ -59,7 +59,7 @@ export default function Overview({ onTabChange }) {
       <div className="panels">
         <div className="panel card">
           <h3>Recent Activity</h3>
-          <ul>
+          <ul className="activity-list">
             {activity.map(a => (
               <li key={a.id}>
                 <strong>{a.user?.name}</strong> booked <em>{a.vehicle?.brand} {a.vehicle?.model}</em>

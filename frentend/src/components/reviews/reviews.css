@@ -1,61 +1,198 @@
+/* ========================================
+   REVIEWS SECTION - PREMIUM STYLING
+   ======================================== */
+
 .reviews-wrapper-x {
-  width: 90%;
+  width: 100%;
   overflow: hidden;
-  white-space: nowrap;
-  padding: 20px 0;
-  margin:0 auto ;
+  padding: 60px 0;
+  position: relative;
+}
+
+.reviews-wrapper-x::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
 }
 
 .reviews-track-x {
-  display: inline-flex;
-  gap: 20px;
-  animation: scrollX 25s linear infinite;
+  display: flex;
+  gap: 24px;
+  animation: scroll-reviews 40s linear infinite;
+  width: fit-content;
 }
 
+.reviews-track-x:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-reviews {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Review Card ---------- */
 .review-box {
-  min-width: 320px;
-  max-width: 320px;
-  background: white;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  display: inline-flex;
-  flex-direction: column;
-  vertical-align: top;
-  white-space: normal;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  width: 380px;
+  min-width: 380px;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/* ⭐ Hover effect */
+.review-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2d5bff, #6366f1, #8b5cf6);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
 .review-box:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 12px 32px rgba(45, 91, 255, 0.12),
+    0 6px 16px rgba(0, 0, 0, 0.08);
+  border-color: rgba(45, 91, 255, 0.2);
 }
 
+.review-box:hover::before {
+  transform: scaleX(1);
+}
+
+/* ---------- Review Header ---------- */
 .review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .review-name {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .review-stars {
-  color: gold;
-  font-size: 18px;
-  white-space: nowrap;
+  font-size: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+  animation: subtle-glow 2s ease-in-out infinite;
 }
 
+@keyframes subtle-glow {
+  0%, 100% {
+    filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 2px 6px rgba(255, 193, 7, 0.5));
+  }
+}
+
+/* ---------- Review Content ---------- */
 .review-content {
-  margin-top: 10px;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #4a5568;
+  margin: 0;
+  position: relative;
+  padding-left: 20px;
 }
 
-@keyframes scrollX {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.review-content::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  top: -8px;
+  font-size: 3rem;
+  font-family: Georgia, serif;
+  color: #e0e7ff;
+  line-height: 1;
+}
+
+/* ---------- Responsive Design ---------- */
+@media (max-width: 768px) {
+  .reviews-wrapper-x {
+    padding: 40px 0;
+  }
+
+  .review-box {
+    width: 320px;
+    min-width: 320px;
+    padding: 24px;
+  }
+
+  .review-name {
+    font-size: 1rem;
+  }
+
+  .review-content {
+    font-size: 0.9rem;
+  }
+
+  .reviews-track-x {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .review-box {
+    width: 280px;
+    min-width: 280px;
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .review-content {
+    font-size: 0.85rem;
+    padding-left: 16px;
+  }
+}
+
+/* ---------- Premium Enhancements ---------- */
+.review-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(45, 91, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.review-box:hover::after {
+  opacity: 1;
 }

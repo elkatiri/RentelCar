@@ -63,7 +63,7 @@ export default function Login() {
             {success && <div className="alert alert-success">{success}</div>}
 
             <div className="form-group">
-              <label>Email Address</label>
+              <label style={{ color: "white" }}>Email :</label>
               <div className="input-wrapper">
                 <Mail size={18} className="input-icon" />
                 <input
@@ -79,7 +79,7 @@ export default function Login() {
             </div>
 
             <div className="form-group">
-              <label>Password</label>
+              <label style={{ color: "white" }}>Password :</label>
               <div className="input-wrapper">
                 <Lock size={18} className="input-icon" />
                 <input

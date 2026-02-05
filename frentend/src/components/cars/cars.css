@@ -112,7 +112,35 @@ p.car-year {
   margin-right: 6px;
   color: #1f1d18;
 }
+/* Book Button */
+.book-button {
+  padding: 13px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg,#ff6b35, #c84c1f);
+  color: white;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+}
 
+.book-button.active:hover {
+  box-shadow: 0 6px 20px #6f2004;
+  transform: translateY(-2px);
+}
+
+.book-button.disabled {
+  background: #be8e7d;
+  color: #8f8d8d;
+  cursor: not-allowed;
+  text-transform: none;
+  letter-spacing: normal;
+}
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
   .car-card {
@@ -157,3 +185,6 @@ p.car-year {
     font-size: 0.85rem;
   }
 }
+
+
+
