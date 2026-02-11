@@ -73,7 +73,7 @@ export default function Signup() {
             {success && <div className="alert alert-success">{success}</div>}
 
             <div className="form-group">
-              <label>Full Name</label>
+              <label className='labelhead'>Full Name</label>
               <div className="input-wrapper">
                 <User size={18} className="input-icon" />
                 <input
@@ -89,7 +89,7 @@ export default function Signup() {
             </div>
 
             <div className="form-group">
-              <label>Email Address</label>
+              <label className='labelhead'>Email Address</label>
               <div className="input-wrapper">
                 <Mail size={18} className="input-icon" />
                 <input
@@ -105,9 +105,8 @@ export default function Signup() {
             </div>
 
             <div className="form-group">
-              <label>Password</label>
+              <label className='labelhead'>Password</label>
               <div className="input-wrapper">
-                <Lock size={18} className="input-icon" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -122,6 +121,7 @@ export default function Signup() {
                   className="toggle-password"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={loading}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -129,9 +129,9 @@ export default function Signup() {
             </div>
 
             <div className="form-group">
-              <label>Confirm Password</label>
+              <label className='labelhead'>Confirm Password</label>
               <div className="input-wrapper">
-                <Lock size={18} className="input-icon" />
+                
                 <input
                   type={showConfirm ? 'text' : 'password'}
                   name="password_confirmation"
@@ -146,6 +146,7 @@ export default function Signup() {
                   className="toggle-password"
                   onClick={() => setShowConfirm(!showConfirm)}
                   disabled={loading}
+                  aria-label={showConfirm ? 'Hide password' : 'Show password'}
                 >
                   {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -166,9 +167,7 @@ export default function Signup() {
           </div>
 
           <div className="terms">
-            <p style={{fontSize: '12px', color: 'var(--muted)'}}>
-              By signing up, you agree to our Terms of Service and Privacy Policy
-            </p>
+            <p>By signing up, you agree to our Terms of Service and Privacy Policy</p>
           </div>
         </div>
 

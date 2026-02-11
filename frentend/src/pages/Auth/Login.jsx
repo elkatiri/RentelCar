@@ -63,7 +63,7 @@ export default function Login() {
             {success && <div className="alert alert-success">{success}</div>}
 
             <div className="form-group">
-              <label style={{ color: "white" }}>Email :</label>
+              <label className='labelhead'>Email</label>
               <div className="input-wrapper">
                 <Mail size={18} className="input-icon" />
                 <input
@@ -79,9 +79,8 @@ export default function Login() {
             </div>
 
             <div className="form-group">
-              <label style={{ color: "white" }}>Password :</label>
+              <label className='labelhead'>Password</label>
               <div className="input-wrapper">
-                <Lock size={18} className="input-icon" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -96,6 +95,7 @@ export default function Login() {
                   className="toggle-password"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={loading}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -116,7 +116,7 @@ export default function Login() {
           </div>
 
           <div className="auth-demo">
-            <p className="demo-title">Demo Credentials:</p>
+            <p className="demo-title">Demo Credentials</p>
             <ul>
               <li><strong>Admin:</strong> admin@example.com / password123</li>
               <li><strong>Host:</strong> host@example.com / password123</li>
