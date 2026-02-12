@@ -119,7 +119,6 @@ export default function Login() {
             <p className="demo-title">Demo Credentials</p>
             <ul>
               <li><strong>Admin:</strong> admin@example.com / password123</li>
-              <li><strong>Host:</strong> host@example.com / password123</li>
               <li><strong>User:</strong> customer@example.com / password123</li>
             </ul>
           </div>

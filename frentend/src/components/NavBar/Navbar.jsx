@@ -3,7 +3,7 @@ import { Search, Menu, X, LogOut, ChevronDown, User } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import logo from './../../images/logo.svg';
+import logo from './../../images/logo.png';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -89,8 +89,11 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
-      <div className="logo">
+      {/* <div className="logo">
         <img src={logo} alt="Logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}} />
+      </div> */}
+      <div className="logo" onClick={() => navigate('/')}>
+        <span className="logo-text">RentelCar</span>
       </div>
       <div className='menu-icon' onClick={() => setOpen(!isOpen)}>
         {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -147,7 +150,6 @@ export default function Navbar() {
             </div>
           )}
         </div>
-        <li className='list-cars'>List cars</li>
         
         <div className="auth-section">
           {!token ? (
