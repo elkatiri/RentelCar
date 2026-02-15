@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API } from '../../config/api';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/NavBar/Navbar';
 import './Home.css';
@@ -17,7 +18,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/vehicles');
+        const response = await axios.get(`${API}/vehicles`);
         setCars(response.data);
       } catch (error) {
         console.error('Error fetching cars:', error);

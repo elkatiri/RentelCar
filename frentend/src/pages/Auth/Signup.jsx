@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { API } from '../../config/api';
 import './Auth.css';
-
-const API = 'http://127.0.0.1:8000/api';
 
 export default function Signup() {
   const navigate = useNavigate();

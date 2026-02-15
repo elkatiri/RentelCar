@@ -1,5 +1,6 @@
 import './navbar.css';
 import { Search, Menu, X, LogOut, ChevronDown, User } from 'lucide-react';
+import { API, STORAGE_URL } from '../../config/api';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -30,7 +31,7 @@ export default function Navbar() {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/vehicles?per_page=100');
+        const response = await axios.get(`${API}/vehicles?per_page=100`);
         const vehiclesData = Array.isArray(response.data) ? response.data : (response.data.data || []);
         setAllVehicles(vehiclesData);
       } catch (error) {
@@ -131,7 +132,7 @@ export default function Navbar() {
                       vehicle.image && vehicle.image.startsWith('http')
                         ? vehicle.image
                         : vehicle.image
-                        ? `http://127.0.0.1:8000/storage/${vehicle.image}`
+                        ? `${STORAGE_URL}/${vehicle.image}`
                         : 'https://via.placeholder.com/50x40'
                     }
                     alt={`${vehicle.brand} ${vehicle.model}`}

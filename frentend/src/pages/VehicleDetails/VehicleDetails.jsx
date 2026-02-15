@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API, STORAGE_URL } from '../../config/api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Users, Gauge, Settings, MapPin, Wind, Armchair, Radio, Navigation, Sun, Car, Timer, Flame, Camera, ChevronLeft, Calendar } from 'lucide-react';
 import Swal from 'sweetalert2';
@@ -26,7 +27,7 @@ const VehicleDetails = () => {
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/vehicles/${id}`);
+        const response = await axios.get(`${API}/vehicles/${id}`);
         setVehicle(response.data);
         setLoading(false);
       } catch (error) {
@@ -101,7 +102,7 @@ const VehicleDetails = () => {
 
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/reservations',
+        `${API}/reservations`,
         {
           vehicle_id: vehicle.id,
           user_id: user.id,
@@ -166,7 +167,7 @@ const VehicleDetails = () => {
                 vehicle.image && vehicle.image.startsWith('http')
                   ? vehicle.image
                   : vehicle.image
-                  ? `http://127.0.0.1:8000/storage/${vehicle.image}`
+                  ? `${STORAGE_URL}/${vehicle.image}`
                   : 'https://via.placeholder.com/600x400'
               }
               alt={`${vehicle.brand} ${vehicle.model}`}
@@ -241,7 +242,7 @@ const VehicleDetails = () => {
                     vehicle.image && vehicle.image.startsWith('http')
                       ? vehicle.image
                       : vehicle.image
-                      ? `http://127.0.0.1:8000/storage/${vehicle.image}`
+                      ? `${STORAGE_URL}/${vehicle.image}`
                       : 'https://via.placeholder.com/300x200'
                   }
                   alt={`${vehicle.brand} ${vehicle.model}`}

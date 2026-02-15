@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API, STORAGE_URL } from '../../config/api';
 import { Calendar, MapPin, DollarSign, Trash2, Eye } from 'lucide-react';
 import Swal from 'sweetalert2';
 import './BookingList.css';
@@ -27,7 +28,7 @@ const BookingList = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      let url = `http://127.0.0.1:8000/api/reservations?per_page=50`;
+      let url = `${API}/reservations?per_page=50`;
       if (filterStatus) {
         url += `&status=${filterStatus}`;
       }
@@ -58,7 +59,7 @@ const BookingList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/reservations/${bookingId}`, {
+        await axios.delete(`${API}/reservations/${bookingId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         Swal.fire('Cancelled!', 'Booking has been cancelled.', 'success');
@@ -154,7 +155,7 @@ const BookingList = () => {
                           src={
                             booking.vehicle.image.startsWith('http')
                               ? booking.vehicle.image
-                              : `http://127.0.0.1:8000/storage/${booking.vehicle.image}`
+                              : `${STORAGE_URL}/${booking.vehicle.image}`
                           }
                           alt={`${booking.vehicle?.brand} ${booking.vehicle?.model}`}
                           className="booking-vehicle-image"

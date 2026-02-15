@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API, STORAGE_URL } from '../../config/api';
 import { Calendar, MapPin, X } from 'lucide-react';
 import Swal from 'sweetalert2';
 import './CarListing.css';
@@ -27,7 +28,7 @@ const CarListing = () => {
 
   const fetchVehicles = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/vehicles?per_page=100');
+      const response = await axios.get(`${API}/vehicles?per_page=100`);
       const carsData = Array.isArray(response.data) ? response.data : (response.data.data || []);
       setVehicles(carsData);
       setLoading(false);
@@ -70,7 +71,7 @@ const CarListing = () => {
 
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/reservations',
+        `${API}/reservations`,
         {
           vehicle_id: selectedCar.id,
           user_id: user.id,
@@ -167,7 +168,7 @@ const CarListing = () => {
                     selectedCar.image && selectedCar.image.startsWith('http')
                       ? selectedCar.image
                       : selectedCar.image
-                      ? `http://127.0.0.1:8000/storage/${selectedCar.image}`
+                      ? `${STORAGE_URL}/${selectedCar.image}`
                       : 'https://via.placeholder.com/300x200'
                   }
                   alt={`${selectedCar.brand} ${selectedCar.model}`}

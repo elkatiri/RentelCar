@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { STORAGE_URL } from '../../config/api'
 import { Users, Gauge, Settings, MapPin, Wind, Armchair, Radio, Navigation, Sun, Car, Timer, Flame, Camera } from 'lucide-react'
 import './cars.css'
 
@@ -66,7 +67,7 @@ export default function Cars({ vehicles, onBookClick, loading, limit, onCarClick
                 src={
                   car.image && car.image.startsWith('http')
                     ? car.image
-                    : car.image ? `http://127.0.0.1:8000/storage/${car.image}` : 'https://via.placeholder.com/300x200'
+                    : car.image ? `${STORAGE_URL}/${car.image}` : 'https://via.placeholder.com/300x200'
                 }
                 alt={`${car.brand} ${car.model}`}
               />

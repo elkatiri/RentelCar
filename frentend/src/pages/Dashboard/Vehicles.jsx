@@ -2,9 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Edit2, Trash2, Plus, Upload } from 'lucide-react';
 import Swal from 'sweetalert2';
+import { API } from '../../config/api';
 import './Dashboard.css';
-
-const API = 'http://127.0.0.1:8000/api';
 const token = localStorage.getItem('token');
 
 export default function Vehicles() {

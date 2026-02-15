@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
 
-const API = 'http://127.0.0.1:8000/api';
+import { API } from '../../config/api';
 const token = localStorage.getItem('token');
 
 export default function Analytics() {
